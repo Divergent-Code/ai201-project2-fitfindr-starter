@@ -275,6 +275,67 @@ Submit the following items through the Course Portal:
 
 ---
 
+## Grading Rubric
+
+> [!info] Project 2 Score Breakdown
+> - **Total Points:** 25pts (Required) + 7pts (Bonus/Stretch)
+
+### Required Features (25 pts)
+
+#### Three Tools with Defined Interfaces (4 pts)
+- [ ] **1 pt**: README lists all 3 required tools, each with a named function.
+- [ ] **1 pt**: Each tool's inputs are described with parameter names and types (e.g., `"description"` (str), `"size"` (str), `"max_price"` (float)).
+- [ ] **1 pt**: Each tool's return value is described — not just "returns a list," but what's in the list.
+- [ ] **1 pt**: Demo or source shows all 3 tools being called within a single interaction.
+
+#### Multi-Step Workflow End to End (2 pts)
+- [ ] **1 pt**: Demo or source shows a complete interaction that starts with a natural language user query and ends with a fit card, using all 3 required tools along the way.
+- [ ] **1 pt**: The demo narration or the README / `planning.md` walkthrough explains what the agent is doing at each step — which tool is being called and why.
+
+#### State Management Across Tool Calls (3 pts)
+- [ ] **1 pt**: Demo or source shows that the item returned by `search_listings` is the same item passed into `suggest_outfit` — without the user re-entering it.
+- [ ] **1 pt**: Demo or source shows the outfit from `suggest_outfit` passing into `create_fit_card` without re-entry.
+- [ ] **1 pt**: README describes the state management approach: what is stored, when, and how it passes between tools.
+
+#### Planning Loop Adaptiveness (4 pts)
+- [ ] **1 pt**: README explains the planning loop's conditional logic — what state it checks and what triggers each decision. "It decides what to do next" does not earn this point.
+- [ ] **1 pt**: README describes what the agent does specifically when `search_listings` returns no results (not just "it handles errors").
+- [ ] **2 pts**: Demo or source shows the agent behaving differently for a non-standard input compared to the happy path — the agent doesn't call all tools unconditionally in the same sequence.
+
+#### Error Handling (3 pts)
+- [ ] **1 pt**: README describes the specific failure mode for each of the 3 required tools and what the agent does in each case.
+- [ ] **1 pt**: Demo or source shows handling for at least one deliberately triggered failure (not a happy-path edge case — an actual failure).
+- [ ] **1 pt**: Demo or source shows the agent's response to the failure is specific and actionable — it tells the user what failed and what to try next.
+
+#### planning.md Quality (4 pts)
+- [ ] **1 pt**: Tools — all 3 required tools described with name, inputs (name + type), return value, and what the agent does on failure.
+- [ ] **1 pt**: Planning Loop — conditional logic described (not just intent); State Management — what is stored and how it flows.
+- [ ] **1 pt**: Error Handling table — completed with specific agent responses for each tool's failure mode; Complete Interaction walkthrough — traces the example query step-by-step through all three tool calls.
+- [ ] **1 pt**: Architecture diagram — shows data and control flow through the agent; AI Tool Plan — names specific spec sections used to prompt AI tools and describes how generated code was verified against the spec.
+
+#### README Completeness (3 pts)
+- [ ] **1 pt**: Tool inventory with inputs, outputs, and purpose for each tool; planning loop explanation with conditional logic; state management approach.
+- [ ] **1 pt**: Error handling per tool with at least one concrete example from testing.
+- [ ] **1 pt**: Spec reflection (one way the spec helped, one divergence and why).
+
+#### AI Usage Transparency (2 pts)
+- [ ] **1 pt**: Section describes at least 2 specific instances of AI tool use, naming what the student directed the AI to do in each case.
+- [ ] **1 pt**: Each instance describes what the student reviewed, revised, or overrode.
+
+### Stretch Features (Bonus: +7 pts)
+
+> [!tip] Project 2 Stretch Features
+> - [ ] **+2 pts | Price Comparison Tool**: 
+> 	- Demo or source shows the tool returning a price assessment with reasoning based on comparable listings in the dataset. README describes how comparisons are made.
+> - [ ] **+2 pts | Style Profile Memory**: 
+> 	- Demo or source shows two interactions where the second uses style preferences from the first without re-entry. README describes the storage approach.
+> - [ ] **+2 pts | Trend Awareness Tool**: 
+> 	- Demo or source shows the tool returning trend information that visibly influences the outfit suggestion. README describes the data source used.
+> - [ ] **+1 pt | Retry Logic with Fallback**: 
+> 	- Demo or source shows the agent handling a zero-result search by automatically retrying with loosened constraints, explaining to the user what was adjusted.
+
+---
+
 ## Key Files for Agents
 
 | File | What to know before editing |
