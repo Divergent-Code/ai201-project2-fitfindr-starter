@@ -33,18 +33,44 @@ def handle_query(user_query: str, wardrobe_choice: str) -> tuple[str, str, str]:
             (listing_text, outfit_suggestion, fit_card)
         Each string maps to one of the three output panels in the UI.
 
-    TODO:
-        1. Guard against an empty query (return early with an error message).
-        2. Select the wardrobe based on wardrobe_choice.
-        3. Call run_agent() with the query and selected wardrobe.
-        4. If session["error"] is set, return the error in the first panel
-           and empty strings for the other two.
-        5. Otherwise, format session["selected_item"] into a readable listing_text
-           string and return it along with session["outfit_suggestion"] and
-           session["fit_card"].
+    The listing panel also surfaces the retry/fallback warning and the price
+    assessment (stretch features) when present.
     """
-    # TODO: implement this function
-    return "Agent not yet implemented.", "", ""
+    # 1. Guard against an empty query.
+    if not user_query or not user_query.strip():
+        return "Please describe what you're looking for.", "", ""
+
+    # 2. Select the wardrobe.
+    wardrobe = (
+        get_empty_wardrobe()
+        if wardrobe_choice == "Empty wardrobe (new user)"
+        else get_example_wardrobe()
+    )
+
+    # 3. Run the agent.
+    session = run_agent(user_query, wardrobe)
+
+    # 4. Error -> message in the first panel, blanks elsewhere.
+    if session["error"]:
+        return f"⚠️ {session['error']}", "", ""
+
+    # 5. Format the selected listing (plus warning / price note) for panel one.
+    item = session["selected_item"]
+    lines = []
+    if session.get("warning"):
+        lines.append(f"ℹ️ {session['warning']}\n")
+    lines.append(f"{item['title']}")
+    lines.append(f"${item['price']:.0f} · size {item['size']} · {item['condition']}")
+    lines.append(f"Platform: {item['platform']}")
+    lines.append(f"Style: {', '.join(item['style_tags'])}")
+    lines.append(f"\n{item['description']}")
+    if session.get("price_assessment"):
+        lines.append(f"\n💲 {session['price_assessment']}")
+    if session.get("trends"):
+        lines.append(f"📈 {session['trends']}")
+    listing_text = "\n".join(lines)
+
+    return listing_text, session["outfit_suggestion"], session["fit_card"]
 
 
 # ── interface ─────────────────────────────────────────────────────────────────
