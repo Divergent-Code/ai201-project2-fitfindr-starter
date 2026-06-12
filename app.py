@@ -77,6 +77,7 @@ def handle_query(user_query: str, wardrobe_choice: str) -> tuple[str, str, str]:
 
 EXAMPLE_QUERIES = [
     "vintage graphic tee under $30",
+    "vintage graphic tee under $10",         # retry/fallback (cheapest tee is $12)
     "90s track jacket in size M",
     "flowy midi skirt under $40",
     "black combat boots size 8",

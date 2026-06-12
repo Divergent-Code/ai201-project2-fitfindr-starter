@@ -312,3 +312,37 @@ if __name__ == "__main__":
         wardrobe=get_example_wardrobe(),
     )
     print(f"Error message: {session2['error']}")
+
+    # ── Style Profile Memory: two interactions, no re-entry (stretch) ──────────
+    # Session A states a standing preference; session B never restates it, yet
+    # the agent reuses it from data/style_profile.json. The proof (the loaded
+    # profile) is set at step 1, before any LLM call, so this demo is meaningful
+    # even without a Groq key.
+    print("\n\n=== Style Profile Memory: session A saves, session B reuses ===\n")
+
+    # Start from a clean slate so the demo is reproducible (file is git-ignored).
+    if os.path.exists(_PROFILE_PATH):
+        os.remove(_PROFILE_PATH)
+    print(f"Profile before session A: {_load_style_profile()!r}")
+
+    print("\n--- Session A (states a preference) ---")
+    query_a = (
+        "I'm looking for a vintage graphic tee under $30. "
+        "I mostly wear baggy jeans and chunky sneakers."
+    )
+    session_a = run_agent(query_a, get_example_wardrobe())
+    print(f"Query A: {query_a}")
+    print(f"Found: {session_a['selected_item']['title'] if session_a['selected_item'] else None}")
+    print(f"Profile saved to disk after session A: {_load_style_profile()!r}")
+
+    print("\n--- Session B (NEW query, never restates the preference) ---")
+    query_b = "show me a 90s denim jacket"
+    parsed_b, prefs_b = _parse_query(query_b)
+    session_b = run_agent(query_b, get_example_wardrobe())
+    print(f"Query B: {query_b}")
+    print(f"New preferences parsed from query B: {prefs_b}  (none — not restated)")
+    print(f"Style profile the agent loaded & used in session B: {session_b['style_profile']!r}")
+    print(
+        "\n=> Session B reused 'baggy jeans and chunky sneakers' from session A "
+        "without the user re-entering it."
+    )

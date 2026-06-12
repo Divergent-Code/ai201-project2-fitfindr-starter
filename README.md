@@ -23,7 +23,7 @@ Run it:
 ```bash
 python utils/data_loader.py   # sanity-check the data loads
 pytest                        # run the tool unit tests
-python agent.py               # CLI walkthrough (happy path, retry, no-results)
+python agent.py               # CLI walkthrough (happy path, retry, no-results, style-memory)
 python app.py                 # Gradio web UI (http://localhost:7860)
 ```
 
@@ -164,6 +164,11 @@ load, `preferences` populates `session["style_profile"]` and is passed to
 `suggest_outfit`. On save, newly detected preference phrases (e.g.
 *"I mostly wear baggy jeans"*) are merged **append-if-new** so prior sessions
 aren't overwritten. The caller always checks `session["error"]` first.
+
+The two-session reuse is demonstrated end-to-end by the **style-memory block** at
+the bottom of `python agent.py`: session A states *"I mostly wear baggy jeans and
+chunky sneakers"* and saves it; session B issues a brand-new query that never
+restates the preference, yet the agent loads and reuses it without re-entry.
 
 ---
 
